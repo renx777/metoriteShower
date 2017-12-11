@@ -1,0 +1,30 @@
+*{
+font-family:"Helevetica Neue";
+}
+
+#map{
+  margin:40px
+}
+
+p{
+  font-size:0.85em;
+}
+
+svg{
+  background:#266D98;
+}
+
+.country{
+  fill:#A9E8D2;
+  stroke:#266D98;
+    
+}
+
+.selected{
+  fill:grey
+}
+
+.circle{
+  stroke:white;
+ opacity:0.6
+}
