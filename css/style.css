@@ -3,7 +3,13 @@ font-family:"Helevetica Neue";
 }
 
 #map{
-  margin:40px
+  
+}
+
+h1{
+text-align:center;
+font-size:50px;
+  font-family:verdana;
 }
 
 p{
@@ -12,6 +18,7 @@ p{
 
 svg{
   background:#266D98;
+  margin-left:70px
 }
 
 .country{
@@ -27,4 +34,19 @@ svg{
 .circle{
   stroke:white;
  opacity:0.6
+}
+
+
+.tooltip {
+            position: absolute;
+            font-size: 14px;
+            width:  auto;
+  padding-top:18px;
+  padding-left:10px;
+  padding-right:10px;
+  padding-bottom:18px;
+            height: auto;
+            pointer-events: none;
+  color:white;
+            background-color: black;
 }

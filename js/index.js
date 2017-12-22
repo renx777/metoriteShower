@@ -3,7 +3,7 @@
 
 var margin = { top: 50, left: 50, right: 50, bottom: 50 },
     height =900 - margin.top - margin.bottom,
-    width = 1400 - margin.left - margin.right,
+    width = 1200 - margin.left - margin.right,
     scale0 = (width - 1) / 2 / Math.PI;
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -54,7 +54,44 @@ function ready(error, data,meteors) {
     d3.select(this).classed("selected",false)
   })
   
-  
+   var tooltip = d3
+    .select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+  var data=meteors.features;
+    // tooltip mouseover event handler
+    var tipMouseover = function(data) {
+     console.log(data.properties)
+      //var color = colorScale(d.manufacturer);
+      var color = "black";
+      var html =
+        "<span>Mass:" + data.properties.mass  +"</span><br/>" +
+         "<span>Fall:" + data.properties.fall  +"</span><br/>" +   
+          "<span>Name:" + data.properties.name  +"</span><br/>"  +
+           "<span>Year:" + data.properties.year  +"</span><br/>" +
+           "<span>Class:" + data.properties.recclass  +"</span><br/>" 
+        
+          ;
+
+      tooltip
+        .html(html)
+        .style("left", d3.event.pageX + 15 + "px")
+        .style("top", d3.event.pageY - 28 + "px")
+        .transition()
+        .duration(200) // ms
+        .style("opacity", 0.9); // started as 0!
+    };
+    // tooltip mouseout event handler
+    var tipMouseout = function(data) {
+     
+      tooltip
+        .transition()
+        .duration(300) // ms
+        .style("opacity", 0); // don't care about position!
+    };
+
   
   //draw circles for meteros
   
@@ -64,11 +101,22 @@ function ready(error, data,meteors) {
   .attr("class", "circle")
       .attr("r",function(d){
     
-    if(d.properties.mass>1000000){
-      return 15
-    }
-       return 2
-  })
+     var range = 718750/2/2;
+    
+        if (d.properties.mass <= range) return 2;
+        else if (d.properties.mass <= range*2) return 10;
+        else if (d.properties.mass <= range*3) return 20;
+        else if (d.properties.mass <= range*20) return 30;
+        else if (d.properties.mass <= range*100) return 40;
+        return 50;
+       
+    
+    
+
+  }
+           
+           
+           )
   
       .attr("cx",function(d){
     
@@ -87,6 +135,8 @@ function ready(error, data,meteors) {
     
     
   })
+  .on("mouseover", tipMouseover)
+    .on("mouseout", tipMouseout)
   .attr("fill", function(d) {
     
     var group=Math.floor((Math.random() * 10) + 1);
@@ -105,9 +155,13 @@ function ready(error, data,meteors) {
 
 
 
- svg.call(d3.zoom().on("zoom", function () {
-            svg.attr("transform", d3.event.transform)
-        }))
+
+// zoom and pan
+svg.call(d3.zoom().on("zoom", function () {
+  d3.event.transform.x = Math.min(0, Math.max(d3.event.transform.x, width - width * d3.event.transform.k));
+  d3.event.transform.y = Math.min(0, Math.max(d3.event.transform.y, height - height * d3.event.transform.k));
+  svg.attr("transform", d3.event.transform);
+}));
 
 
 d3.select(self.frameElement).style("height", height + "px");
